@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { clsx } from "clsx"
 import { languages } from "./languages"
 import { getFarewellText, getRandomWord } from "./utils"
@@ -35,9 +35,24 @@ export default function AssemblyEndgame() {
         setCurrentWord(getRandomWord())
         setGuessedLetters([])
         setIsGameOver(false)
-        setIsGameWon(false)
+        setIsGa
+        meWon(false)
     }
-
+    const [windowDimensions, setWindowDimensions] = useState({ 
+        width: window.innerWidth,
+        height: window.innerHeight 
+    })
+    useEffect(() => {
+        function handleResize() {
+            setWindowDimensions({
+                width: window.innerWidth,
+                height: window.innerHeight
+            })
+        }
+        
+        window.addEventListener('resize', handleResize)
+        return () => window.removeEventListener('resize', handleResize)
+    }, [])
 
     function addGuessedLetter(letter) {
         setGuessedLetters(prevLetters =>
@@ -131,8 +146,8 @@ export default function AssemblyEndgame() {
                 isGameWon && <Confetti
                     recycle={false}
                     numberOfPieces={1000}
-                    width={window.innerWidth}
-                    height={window.innerHeight}
+                    width={windowDimensions.width}
+                    height={windowDimensions.height}
                 />
             }
             <header>
